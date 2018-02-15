@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 04.02.2018 20:26:54 by Hibernate Tools 4.3.5.Final -->
+<hibernate-mapping>
+    <class name="sv.com.model.Libro" table="libro" catalog="bibliotecabd" optimistic-lock="version">
+        <id name="idLibro" type="java.lang.Integer">
+            <column name="id_libro" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="autor" class="sv.com.model.Autor" fetch="select">
+            <column name="autor" not-null="true" />
+        </many-to-one>
+        <many-to-one name="categoria" class="sv.com.model.Categoria" fetch="select">
+            <column name="categoria" not-null="true" />
+        </many-to-one>
+        <many-to-one name="editorial" class="sv.com.model.Editorial" fetch="select">
+            <column name="editorial" not-null="true" />
+        </many-to-one>
+        <many-to-one name="idioma" class="sv.com.model.Idioma" fetch="select">
+            <column name="idioma" not-null="true" />
+        </many-to-one>
+        <property name="titulo" type="string">
+            <column name="titulo" length="150" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

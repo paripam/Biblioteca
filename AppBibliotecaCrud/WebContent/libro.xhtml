@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head></h:head>
+<h:body>
+	<h:form>
+		<p:panel style="text-align: center;">
+			<p:menuButton value="Inicio">
+				<p:menuitem value="Inicio" outcome="index.xhtml" icon="ui-icon-home" />
+			</p:menuButton>
+			<p:menuButton value="Autores">
+				<p:menuitem value="Autores" outcome="autor.xhtml"
+					icon="ui-icon-home" />
+			</p:menuButton>
+			<p:menuButton value="Libros">
+				<p:menuitem value="Libros" outcome="libro.xhtml" icon="ui-icon-home" />
+			</p:menuButton>
+		</p:panel>
+	</h:form>
+	<h1>Listado de Libros</h1>
+	<hr />
+	<h:form>
+		<p:commandButton value="Nuevo"
+			actionListener="#{libroBean.prepararNuevoRegistro()}"
+			update=":frmNuevo" oncomplete="PF('dialogNuevo').show();" />
+	</h:form>>
+	<h:form id="frmLista">
+		<p:dataTable id="tablaListar" var="item"
+			value="#{libroBean.listarLibros}"
+			emptyMessage="No hay libros registrados" paginatorPosition="top"
+			paginator="true" rows="10">
+
+			<p:column headerText="Id">
+				<p:outputLabel value="#{item.idLibro}"></p:outputLabel>
+			</p:column>
+
+			<p:column headerText="Titulo">
+				<p:outputLabel value="#{item.titulo}"></p:outputLabel>
+			</p:column>
+
+			<p:column headerText="Editorial">
+				<p:outputLabel value="#{item.editorial.nombreEditorial}"></p:outputLabel>
+			</p:column>
+
+			<p:column headerText="Autor">
+				<p:outputLabel
+					value="#{item.autor.nombresAutor} {#{item.autor.apellidosAutor}}"></p:outputLabel>
+			</p:column>
+			<p:column headerText="Idioma">
+				<p:outputLabel value="#{item.idioma.idioma}"></p:outputLabel>
+			</p:column>
+			<p:column headerText="Modificar">
+				<p:commandButton value="Modificar"
+					oncomplete="PF('dialogEditar').show();" update=":frmEditar">
+					<f:setPropertyActionListener value="#{item}"
+						target="#{libroBean.libro}" />
+				</p:commandButton>
+			</p:column>
+			<p:column headerText="Eliminar">
+				<p:commandButton value="Eliminar"
+					oncomplete="PF('dialogEliminar').show();" update=":frmEliminar">
+					<f:setPropertyActionListener value="#{item}"
+						target="#{libroBean.libro}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+	<h:form id="frmNuevo">
+		<p:dialog id="dlgNuevo" header="Nuevo Registro"
+			widgetVar="dialogNuevo" modal="true" showEffect="slide"
+			hideEffect="explode" resizable="false">
+			<h:panelGrid columns="2">
+				<p:outputLabel value="Titulo de Libro:"></p:outputLabel>
+				<p:inputText value="#{libroBean.libro.titulo}"></p:inputText>
+
+				<p:outputLabel value="Editorial:"></p:outputLabel>
+				<p:selectOneMenu value="#{libroBean.libro.editorial.idEditorial}">
+					<f:selectItem itemLabel="--Selection Editorial--" itemValue="" />
+					<f:selectItems value="#{libroBean.listEditorial}"></f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Autor:" />
+				<p:selectOneMenu value="#{libroBean.libro.autor.idAutor}">
+					<f:selectItem itemLabel="--Seleccione Autor--" />
+					<f:selectItems value="#{libroBean.listAutor}"></f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Idioma:" />
+				<p:selectOneMenu value="#{libroBean.libro.idioma.idIdioma}">
+					<f:selectItem itemLabel="--Seleccione Idioma--" itemValue="" />
+					<f:selectItems value="#{libroBean.listIdioma}"></f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Categoria: " />
+				<p:selectOneMenu value="#{libroBean.libro.categoria.idCategoria}">
+					<f:selectItem itemLabel="--Seleccione Categoria--" itemValue="" />
+					<f:selectItems value="#{libroBean.listCategoria}"></f:selectItems>
+				</p:selectOneMenu>
+
+			</h:panelGrid>
+			<hr />
+			<p:commandButton value="Guardar"
+				actionListener="#{libroBean.nuevoLibro()}"
+				oncomplete="PF('dialogNuevo').hide();"
+				update=":frmLista:tablaListar" />
+			<p:commandButton value="Cancelar" onclick="PF('dialogNuevo').hide();"></p:commandButton>
+
+		</p:dialog>
+	</h:form>
+
+	<h:form id="frmEditar">
+		<p:dialog id="dlgEditar" header="Editar Registro"
+			widgetVar="dialogEditar" modal="true" showEffect="slide"
+			hideEffect="explode" resizable="false">
+			<h:panelGrid columns="2">
+				<p:outputLabel value="Titulo de Libro:"></p:outputLabel>
+				<p:inputText value="#{libroBean.libro.titulo}"></p:inputText>
+
+				<p:outputLabel value="Editorial:"></p:outputLabel>
+				<p:selectOneMenu value="#{libroBean.libro.editorial.idEditorial}">
+					<f:selectItem itemLabel="--Selection Editorial--" itemValue="" />
+					<f:selectItems value="#{libroBean.listEditorial}"></f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Autor:" />
+				<p:selectOneMenu value="#{libroBean.libro.autor.idAutor}">
+					<f:selectItem itemLabel="--Seleccione Autor--" />
+					<f:selectItems value="#{libroBean.listAutor}"></f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Idioma:" />
+				<p:selectOneMenu value="#{libroBean.libro.idioma.idIdioma}">
+					<f:selectItem itemLabel="--Seleccione Idioma--" itemValue="" />
+					<f:selectItems value="#{libroBean.listIdioma}"></f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Categoria: " />
+				<p:selectOneMenu value="#{libroBean.libro.categoria.idCategoria}">
+					<f:selectItem itemLabel="--Seleccione Categoria--" itemValue="" />
+					<f:selectItems value="#{libroBean.listCategoria}"></f:selectItems>
+				</p:selectOneMenu>
+
+			</h:panelGrid>
+			<hr />
+			<p:commandButton value="Guardar"
+				actionListener="#{libroBean.editarLibro()}"
+				oncomplete="PF('dialogEditar').hide();"
+				update=":frmLista:tablaListar" />
+			<p:commandButton value="Cancelar"
+				onclick="PF('dialogEditar').hide();"></p:commandButton>
+		</p:dialog>
+	</h:form>
+	<h:form id="frmEliminar">
+		<p:dialog id="dlgEliminar" widgetVar="dialogEliminar"
+			resizable="false" showEffect="explode" hideEffect="explode"
+			modal="true">
+			<h:outputText value="Desea eliminar este registro?" />
+			<p:commandButton value="SI"
+				actionListener="#{libroBean.deleteLibro()}"
+				update=":frmLista:tablaListar"
+				oncomplete="PF('dialogEliminar').hide;"></p:commandButton>
+			<p:commandButton value="No" onclick="PF('dialogEliminar').hide();"></p:commandButton>
+		</p:dialog>
+	</h:form>
+
+</h:body>
+</html>

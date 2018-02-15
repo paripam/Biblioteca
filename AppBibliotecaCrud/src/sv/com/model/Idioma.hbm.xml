@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 04.02.2018 20:26:54 by Hibernate Tools 4.3.5.Final -->
+<hibernate-mapping>
+    <class name="sv.com.model.Idioma" table="idioma" catalog="bibliotecabd" optimistic-lock="version">
+        <id name="idIdioma" type="java.lang.Integer">
+            <column name="id_idioma" />
+            <generator class="identity" />
+        </id>
+        <property name="idioma" type="string">
+            <column name="idioma" length="50" not-null="true" />
+        </property>
+        <set name="libros" table="libro" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idioma" not-null="true" />
+            </key>
+            <one-to-many class="sv.com.model.Libro" />
+        </set>
+    </class>
+</hibernate-mapping>

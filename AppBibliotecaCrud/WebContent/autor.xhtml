@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head></h:head>
+<h:body>
+		<h:form>
+		<p:panel style="text-align: center;">
+			<p:menuButton value="Inicio">
+				<p:menuitem value="Inicio" outcome="index.xhtml" icon="ui-icon-home" />
+			</p:menuButton>
+			<p:menuButton value="Autores">
+				<p:menuitem value="Autores" outcome="autor.xhtml"
+					icon="ui-icon-home" />
+			</p:menuButton>
+			<p:menuButton value="Libros">
+				<p:menuitem value="Libros" outcome="libro.xhtml" icon="ui-icon-home" />
+			</p:menuButton>
+		</p:panel>
+	</h:form>
+	
+	<h1>Listado de Autores</h1>
+
+	<hr />
+	<h:form>
+		<p:commandButton value="Nuevo"
+			actionListener="#{autorBean.prepararNuevoRegistro()}"
+			oncomplete="PF('dialogNuevo').show();" update=":formNuevo" />
+	</h:form>
+	<h:form id="frmLista">
+		<p:dataTable id="tablaListar" var="item"
+			value="#{autorBean.listaAutores}"
+			emptyMessage="No hay autores registrados" paginatorPosition="top"
+			paginator="true" rows="10">
+
+			<p:column headerText="Id">
+				<p:outputLabel value="#{item.idAutor}"></p:outputLabel>
+			</p:column>
+
+			<p:column headerText="Nombre Autor">
+				<p:outputLabel value="#{item.nombresAutor}"></p:outputLabel>
+			</p:column>
+
+			<p:column headerText="Apellidos">
+				<p:outputLabel value="#{item.apellidosAutor}"></p:outputLabel>
+			</p:column>
+
+			<p:column headerText="Nacionalidad">
+				<p:outputLabel value="#{item.pais.nombrePais}"></p:outputLabel>
+			</p:column>
+			<p:column headerText="Modificar">
+				<p:commandButton value="Modificar"
+					oncomplete="PF('dialogModificar').show();" update=":formModificar">
+					<f:setPropertyActionListener value="#{item}"
+						target="#{autorBean.autor}"></f:setPropertyActionListener>
+				</p:commandButton>
+			</p:column>
+			<p:column headerText="Eliminar">
+				<p:commandButton value="Eliminar"
+					oncomplete="PF('dialogEliminar').show();" update=":formEliminar">
+					<f:setPropertyActionListener value="#{item}"
+						target="#{autorBean.autor}"></f:setPropertyActionListener>
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+	<h:form id="formNuevo">
+		<p:dialog id="dlgNuevo" widgetVar="dialogNuevo" resizable="false"
+			showEffect="explode" hideEffect="explode" modal="true">
+			<p:panelGrid columns="2" style="margin: 0 auto;">
+				<p:outputLabel value="Nombres"></p:outputLabel>
+				<p:inputText value="#{autorBean.autor.nombresAutor}"></p:inputText>
+
+				<p:outputLabel value="Apellidos"></p:outputLabel>
+				<p:inputText value="#{autorBean.autor.apellidosAutor}"></p:inputText>
+
+				<p:outputLabel value="Nacionalidad"></p:outputLabel>
+				<p:selectOneMenu id="pais" value="#{autorBean.autor.pais.idPais}"
+					style="width:100%;">
+					<f:selectItem itemLabel="--Seleccione Pais--" itemValue="" />
+					<f:selectItems value="#{autorBean.listaPaises}" />
+				</p:selectOneMenu>
+			</p:panelGrid>
+			<p:commandButton value="Guardar"
+				actionListener="#{autorBean.nuevoAutor()}"
+				update=":frmLista:tablaListar"
+				oncomplete="PF('dialogNuevo').hide();" />
+			<p:commandButton value="Cancelar" onclick="PF('dialogNuevo').hide();" />
+		</p:dialog>
+	</h:form>
+
+	<h:form id="formModificar">
+		<p:dialog id="dlgModificar" widgetVar="dialogModificar"
+			resizable="false" showEffect="explode" hideEffect="explode"
+			modal="true">
+			<p:panelGrid columns="2" style="margin: 0 auto;">
+				<p:outputLabel value="Nombres"></p:outputLabel>
+				<p:inputText value="#{autorBean.autor.nombresAutor}"></p:inputText>
+
+				<p:outputLabel value="Apellidos"></p:outputLabel>
+				<p:inputText value="#{autorBean.autor.apellidosAutor}"></p:inputText>
+
+				<p:outputLabel value="Nacionalidad"></p:outputLabel>
+				<p:selectOneMenu id="pais" value="#{autorBean.autor.pais.idPais}"
+					style="width:100%;">
+					<f:selectItem itemLabel="--Seleccione Pais--" itemValue="" />
+					<f:selectItems value="#{autorBean.listaPaises}" />
+				</p:selectOneMenu>
+			</p:panelGrid>
+			<p:commandButton value="Guardar"
+				actionListener="#{autorBean.editarAutor()}"
+				update=":frmLista:tablaListar"
+				oncomplete="PF('dialogModificar').hide();" />
+			<p:commandButton value="Cancelar"
+				onclick="PF('dialogModificar').hide();" />
+		</p:dialog>
+	</h:form>
+
+	<h:form id="formEliminar">
+		<p:dialog id="dlgEliminar" widgetVar="dialogEliminar"
+			resizable="false" showEffect="explode" hideEffect="explode"
+			modal="true">
+			<h:outputText value="Desea eliminar este registro?" />
+			<p:commandButton value="SI"
+				actionListener="#{autorBean.eliminarAutor()}"
+				update=":frmLista:tablaListar"
+				oncomplete="PF('dialogEliminar').hide;"></p:commandButton>
+			<p:commandButton value="No" onclick="PF('dialogEliminar').hide();"></p:commandButton>
+		</p:dialog>
+	</h:form>
+</h:body>
+</html>
